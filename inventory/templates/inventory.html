@@ -42,7 +42,7 @@ FOOD SENSE
                             <div class="body-text text-main-dark mt-4">{{ item.ItemName }}</div>
                             <div class="body-text text-main-dark mt-4">{{ item.ThresholdValue }}</div>
                             <div>
-                                <div class="{% if item.InShelf == 'Yes' %}block-available{% else %}block-pending{% endif %} fw-7"> {{ item.AutoOrderSet }} </div>
+                                <div class="{% if item.AutoOrderSet == 'Yes' %}block-available{% else %}block-pending{% endif %} fw-7"> {{ item.AutoOrderSet }} </div>
                             </div>
                         </li>
                         {% endfor %}
