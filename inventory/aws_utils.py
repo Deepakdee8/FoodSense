@@ -1,28 +1,49 @@
 import boto3
 from django.conf import settings
-import environ
+from dotenv import load_dotenv
 import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 # Initialize environment variables
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+# env = environ.Env()
+# environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
+load_dotenv()
+aws_access_key = os.getenv("AWS_ACCESS_KEY_ID")
+os.environ["AWS_ACCESS_KEY_ID"] = aws_access_key
+
+aws_secret_key = os.getenv("AWS_SECRET_ACCESS_KEY")
+os.environ["AWS_SECRET_ACCESS_KEY"] = aws_secret_key
+
+aws_region = os.getenv("AWS_REGION")
+os.environ["AWS_REGION"] = aws_region
+
+dummy_table = os.getenv("DYNAMODB_TABLE_NAME")
+os.environ["DYNAMODB_TABLE_NAME"] = dummy_table
+
+realtime_table_name = os.getenv("INVENTORY_REALTIME_DYNAMODB_TABLE_NAME")
+os.environ["INVENTORY_REALTIME_DYNAMODB_TABLE_NAME"] = realtime_table_name
+
+purchase_table_name = os.getenv("INVENTORY_PURCHASE_DETAILS_DYNAMODB_TABLE_NAME")
+os.environ["INVENTORY_PURCHASE_DETAILS_DYNAMODB_TABLE_NAME"] = purchase_table_name
+
+threshold_table_name = os.getenv("INVENTORY_THRESHOLD_AUTOORDER_DYNAMODB_TABLE_NAME")
+os.environ["INVENTORY_THRESHOLD_AUTOORDER_DYNAMODB_TABLE_NAME"] = threshold_table_name
 
 # Initialize DynamoDB client
 dynamodb = boto3.resource(
     "dynamodb",
-    aws_access_key_id=env("AWS_ACCESS_KEY_ID", default=""),
-    aws_secret_access_key=env("AWS_SECRET_ACCESS_KEY", default=""),
-    region_name=env("AWS_REGION", default="eu-north-1"),
+    aws_access_key_id = aws_access_key,
+    aws_secret_access_key = aws_secret_key,
+    region_name = aws_region,
 )
 
 # Reference the inventory table
-table = dynamodb.Table(env("DYNAMODB_TABLE_NAME", default="Inventory"))
-realtime_table = dynamodb.Table(env("INVENTORY_REALTIME_DYNAMODB_TABLE_NAME", default="Inventory_realtime_data"))
-purchase_table = dynamodb.Table(env("INVENTORY_PURCHASE_DETAILS_DYNAMODB_TABLE_NAME", default="Inventory_purchase_details"))
-threshold_table = dynamodb.Table(env("INVENTORY_THRESHOLD_AUTOORDER_DYNAMODB_TABLE_NAME", default="Inventory_threshold_autoorder"))
+table = dynamodb.Table(dummy_table)
+realtime_table = dynamodb.Table(realtime_table_name)
+purchase_table = dynamodb.Table(purchase_table_name)
+threshold_table = dynamodb.Table(threshold_table_name)
 
 
 def upload_to_dynamodb(json_file_path):

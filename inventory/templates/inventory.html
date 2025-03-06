@@ -5,8 +5,8 @@ FOOD SENSE
 {% endblock %}
 
 {% block content %}
- <!-- main-content-wrap -->
- <div class="main-content-inner">
+<!-- main-content-wrap -->
+<div class="main-content-inner">
     <!-- main-content-wrap -->
 
     <div class="container mb-30">
@@ -42,11 +42,13 @@ FOOD SENSE
                             <div class="body-text text-main-dark mt-4">{{ item.ItemName }}</div>
                             <div class="body-text text-main-dark mt-4">{{ item.ThresholdValue }}</div>
                             <div>
-                                <div class="{% if item.AutoOrderSet == 'Yes' %}block-available{% else %}block-pending{% endif %} fw-7"> {{ item.AutoOrderSet }} </div>
+                                <div
+                                    class="{% if item.AutoOrderSet == 'Yes' %}block-available{% else %}block-pending{% endif %} fw-7">
+                                    {{ item.AutoOrderSet }} </div>
                             </div>
                         </li>
                         {% endfor %}
-                        
+
                     </ul>
                 </div>
                 <div class="flex items-center justify-between flex-wrap gap10">
@@ -63,12 +65,59 @@ FOOD SENSE
                             <a href="#"><i class="icon-chevron-right"></i></a>
                         </li>
                     </ul>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#itemFormModal">
+                        Add Item
+                    </button>
+                </div>
+
+                <!-- Modal for Form -->
+                <div class="modal fade" id="itemFormModal" tabindex="-1" aria-labelledby="itemFormModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="itemFormModalLabel">Add New Item
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="itemName" class="form-label">Item
+                                            Name</label>
+                                        <input type="text" name="itemname" class="form-control" id="itemName" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="thresholdValue" class="form-label">Threshold
+                                            Value</label>
+                                        <input type="number" name="thresholdvalue" class="form-control" id="thresholdValue" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="unit" class="form-label">Unit</label>
+                                        <input type="text" name="unit" class="form-control" id="thresholdValue" required>
+                                    </div>
+                                    <div class="container mx-4">
+                                        <label class="form-label">Auto Reordering:</label>
+                                        <div class="btn-group" role="group" aria-label="Auto Reordering">
+                                            <input type="radio" class="btn-check" name="autoReorder" id="autoReorderYes" value="yes" checked>
+                                            <label class="btn btn-outline-primary" for="autoReorderYes">Yes</label>
+                                    
+                                            <input type="radio" class="btn-check" name="autoReorder" id="autoReorderNo" value="no">
+                                            <label class="btn btn-outline-primary" for="autoReorderNo">No</label>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         <!-- table ends -->
-
-
 
         <br>
         <br>
@@ -105,11 +154,13 @@ FOOD SENSE
                             <div class="body-text text-main-dark mt-4">{{ item.ItemName }}</div>
                             <div class="body-text text-main-dark mt-4">{{ item.Weight }}</div>
                             <div>
-                                <div class="{% if item.InShelf == 'Yes' %}block-available{% else %}block-pending{% endif %} fw-7">{{ item.InShelf }}</div>
+                                <div
+                                    class="{% if item.InShelf == 'Yes' %}block-available{% else %}block-pending{% endif %} fw-7">
+                                    {{ item.InShelf }}</div>
                             </div>
                         </li>
                         {% endfor %}
-                       
+
                     </ul>
                 </div>
                 <div class="flex items-center justify-between flex-wrap gap10">
@@ -169,10 +220,10 @@ FOOD SENSE
                             <div class="body-text text-main-dark mt-4">{{ item.Supplier }}</div>
                             <div class="body-text text-main-dark mt-4">{{ item.PurchaseDate }}</div>
                             <div class="body-text text-main-dark mt-4">{{ item.InvoiceNumber }}</div>
-                           
+
                         </li>
                         {% endfor %}
-                        
+
 
                     </ul>
                 </div>
