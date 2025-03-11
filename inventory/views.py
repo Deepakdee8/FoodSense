@@ -35,7 +35,7 @@ def user_logout(request):
     logout(request)
     return redirect("login")  
 
-@login_required(login_url="login")
+# @login_required(login_url="login")
 def index(request):
 
     # Scan DynamoDB table
@@ -54,7 +54,7 @@ def scan_dynamodb_table(table):
 
     return items
 
-@login_required(login_url="login")
+# @login_required(login_url="login")
 def inventory(request):
     # items_realtime = scan_dynamodb_table(realtime_table)
     # items_purchase = scan_dynamodb_table(purchase_table)
