@@ -1,5 +1,6 @@
 import json
 import os
+from decimal import Decimal
 import pandas as pd
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -34,7 +35,7 @@ def user_logout(request):
     logout(request)
     return redirect("login")  
 
-# @login_required(login_url="login")
+@login_required(login_url="login")
 def index(request):
 
     # Scan DynamoDB table
@@ -53,10 +54,15 @@ def scan_dynamodb_table(table):
 
     return items
 
+@login_required(login_url="login")
 def inventory(request):
-    items_realtime = scan_dynamodb_table(realtime_table)
-    items_purchase = scan_dynamodb_table(purchase_table)
-    items_threshold = scan_dynamodb_table(threshold_table)
+    # items_realtime = scan_dynamodb_table(realtime_table)
+    # items_purchase = scan_dynamodb_table(purchase_table)
+    # items_threshold = scan_dynamodb_table(threshold_table)
+
+    # threshold_response = threshold_table.scan()
+    # items_threshold = threshold_response.get('Items', [])
+    # items_threshold.sort(key=lambda x: int(x["ItemID"]))
 
     # return JsonResponse({
     # 'items_realtime': items_realtime,
@@ -64,14 +70,57 @@ def inventory(request):
     # 'items_threshold': items_threshold
     # })
 
-    return render(request, 'inventory.html', {
-        'items_realtime': items_realtime,
-        'items_purchase': items_purchase,
-        'items_threshold': items_threshold
+    return render(request, 'upload_data.html', {
+        # 'items_realtime': items_realtime,
+        # 'items_purchase': items_purchase,
+        # 'items_threshold': items_threshold
     })
 
+def threshold_levels(request):
+    threshold_response = threshold_table.scan()
+    items_threshold = threshold_response.get('Items', [])
+    items_threshold.sort(key=lambda x: int(x["ItemID"]))
 
-   
+     # Count "Yes" and "No" values in AutoOrderSet
+    auto_order_yes = sum(1 for item in items_threshold if item.get("AutoOrderSet", "").lower() == "yes")
+    auto_order_no = sum(1 for item in items_threshold if item.get("AutoOrderSet", "").lower() == "no")
+
+
+    # return JsonResponse({
+    # 'items_threshold': items_threshold
+    # })
+
+    return render(request, 'threshold.html', {
+         'items_threshold': items_threshold,
+         'auto_order_yes': auto_order_yes,
+         'auto_order_no': auto_order_no
+    })
+
+def purchase_details(request):
+    purchase_response = purchase_table.scan()
+    items_purchase = purchase_response.get('Items', [])
+    items_purchase.sort(key=lambda x: int(x["ItemID"]))
+
+    # return JsonResponse({
+    # 'items_threshold': items_threshold
+    # })
+
+    return render(request, 'purchase.html', {
+        'items_purchase': items_purchase
+    })
+
+def realtime_inventory(request):
+    inventory_response = realtime_table.scan()
+    items_realtime = inventory_response.get('Items', [])
+    items_realtime.sort(key=lambda x: int(x["ItemID"]))
+
+    # return JsonResponse({
+    # 'items_threshold': items_threshold
+    # })
+
+    return render(request, 'realtime.html', {
+        'items_realtime': items_realtime
+    })
 
 def upload_excel(request):
     if request.method == 'POST' and request.FILES.get('excel_file'):
@@ -102,7 +151,6 @@ def upload_excel(request):
         return redirect('upload_excel')
 
     return render(request, 'index.html')
-
 
 def upload_to_cloud(request):
     if request.method == 'POST':
@@ -160,3 +208,31 @@ def get_least_quantity_items(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+def add_item(request):
+    if request.method == "POST":
+        try:
+            item_id = int(request.POST.get("ItemID"))
+            item_name = request.POST.get("itemname")
+            threshold_value = request.POST.get("thresholdvalue")
+            unit = request.POST.get("unit")
+            auto_order = request.POST.get("autoReorder")
+
+            # Convert threshold_value to Decimal (DynamoDB does not accept float)
+            threshold_value = Decimal(threshold_value)
+
+            # Store data in DynamoDB
+            threshold_table.put_item(
+                Item={
+                    "ItemID": item_id,  # Convert to string as DynamoDB expects keys as strings
+                    "ItemName": item_name,
+                    "ThresholdValue": threshold_value,
+                    # "Unit": unit,
+                    "AutoOrderSet": "Yes" if auto_order == "yes" else "No",
+                }
+            )
+
+            messages.success(request, "Item added successfully!")
+        except Exception as e:
+            messages.error(request, f"Error adding item: {e}")
+
+    return redirect("inventory")

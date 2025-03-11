@@ -77,46 +77,45 @@
                       </div>
                       <div class="text">Inventory</div>
                     </a>
+                    
+                    <ul class="sub-menu">
+                      <li class="sub-menu-item">
+                        <a href="{% url 'threshold_levels' %}" class="">
+                          <div class="text">Threshold Levels</div>
+                        </a>
+                      </li>
+                    </ul>
+                    <ul class="sub-menu">
+                      <li class="sub-menu-item">
+                        <a href="{% url 'realtime_inventory' %}" class="">
+                          <div class="text">Realtime Inventory Levels</div>
+                        </a>
+                      </li>
+                    </ul>
+                    <ul class="sub-menu">
+                      <li class="sub-menu-item">
+                        <a href="{% url 'purchase_details' %}" class="">
+                          <div class="text">Purchase Details</div>
+                        </a>
+                      </li>
+                    </ul>
                     <ul class="sub-menu">
                       <li class="sub-menu-item">
                         <a href="{% url 'inventory' %}" class="">
-                          <div class="text">Details</div>
+                          <div class="text">Upload Data</div>
                         </a>
                       </li>
                     </ul>
                   </li>
-                  <li class="menu-item has-children">
-                    <a href="javascript:void(0);" class="menu-item-button">
-                      <div class="icon"><i class="icon-file-plus"></i></div>
-                      <div class="text">Total Waste</div>
-                    </a>
-                    <ul class="sub-menu">
-                      <li class="sub-menu-item">
-                        <a href="#" class="">
-                          <div class="text">Food Spoilage</div>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="menu-item has-children">
+                 
+                  <li class="menu-item ">
                     <a href="javascript:void(0);" class="menu-item-button">
                       <div class="icon"><i class="icon-layers"></i></div>
                       <div class="text">Food</div>
                     </a>
-                    <ul class="sub-menu">
-                      <li class="sub-menu-item">
-                        <a href="#" class="">
-                          <div class="text">Menu</div>
-                        </a>
-                      </li>
-                      <li class="sub-menu-item">
-                        <a href="#" class="">
-                          <div class="text">Specific Change</div>
-                        </a>
-                      </li>
-                    </ul>
+                  
                   </li>
-                  <li class="menu-item has-children">
+                  <li class="menu-item ">
                     <a href="javascript:void(0);" class="menu-item-button">
                       <div class="icon">
                         <svg width="24" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -127,43 +126,10 @@
                       </div>
                       <div class="text">Order</div>
                     </a>
-                    <ul class="sub-menu">
-                      <li class="sub-menu-item">
-                        <a href="#" class="">
-                          <div class="text">Order list</div>
-                        </a>
-                      </li>
-                      <li class="sub-menu-item">
-                        <a href="#" class="">
-                          <div class="text">Order detail</div>
-                        </a>
-                      </li>
-                      <li class="sub-menu-item">
-                        <a href="#" class="">
-                          <div class="text">Reorder</div>
-                        </a>
-                      </li>
-                    </ul>
+                    
                   </li>
-                  <li class="menu-item has-children">
-                    <a href="javascript:void(0);" class="menu-item-button">
-                      <div class="icon"><i class="icon-user"></i></div>
-                      <div class="text">Users</div>
-                    </a>
-                    <ul class="sub-menu">
-                      <li class="sub-menu-item">
-                        <a href="login.html" class="">
-                          <div class="text">Add new user</div>
-                        </a>
-                      </li>
-                      <li class="sub-menu-item">
-                        <a href="login.html" class="">
-                          <div class="text">Login</div>
-                        </a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="menu-item has-children">
+                
+                  <li class="menu-item ">
                     <a href="javascript:void(0);" class="menu-item-button">
                       <div class="icon">
                         <svg width="24" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -174,14 +140,7 @@
                       </div>
                       <div class="text">Analytics</div>
                     </a>
-                    <ul class="sub-menu">
-                      <li class="sub-menu-item">
-                        <a href="index.html" class="">
-                          <div class="text">View Store</div>
-                        </a>
-                      </li>
-
-                    </ul>
+                   
                   </li>
 
                   <li class="menu-item">
@@ -528,6 +487,37 @@
 
   </script>
   <!-- / chart js -->
+
+  <!--  threshold chart -->
+
+  <!-- Include ApexCharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get data from Django template
+        var autoOrderYes = {{ auto_order_yes }};
+        var autoOrderNo = {{ auto_order_no }};
+
+        // Chart options
+        var options = {
+            series: [autoOrderYes, autoOrderNo],
+            chart: {
+                type: 'pie',
+                height: 350
+            },
+            labels: ['Auto Order - Yes', 'Auto Order - No'],
+            colors: ['#28a745', '#dc3545'], // Green for Yes, Red for No
+            legend: {
+                position: 'bottom'
+            }
+        };
+
+        // Render the chart
+        var chart = new ApexCharts(document.querySelector("#pieChart"), options);
+        chart.render();
+    });
+</script>
+  <!-- /  threshold chart -->
 
 </body>
 

@@ -53,7 +53,7 @@
                         </div>
 
 
-                        <form class="form-login flex flex-column gap22 w-full" action="{% url 'login' %}">
+                        <form class="form-login flex flex-column gap22 w-full" method="POST" action="{% url 'login' %}">
                             {% csrf_token %}
                             <fieldset class="email">
                                 <div class="body-title mb-10 text-white">User Name <span class="tf-color-1">*</span>

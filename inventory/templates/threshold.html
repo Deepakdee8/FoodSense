@@ -1,0 +1,173 @@
+{% extends "layout.html" %}
+
+{% block title %}
+FOOD SENSE
+{% endblock %}
+
+{% block content %}
+<!-- main-content-wrap -->
+<div class="main-content-inner">
+    <!-- main-content-wrap -->
+
+    <div class="container mb-30">
+        <!-- custom chart -->
+        <br>
+
+         <!-- Display Success & Error Messages -->
+         {% if messages %}
+         <div class="mt-3 w-100">
+           {% for message in messages %}
+           <div class="alert 
+           {% if message.tags == 'success' %}alert-success 
+           {% elif message.tags == 'error' %}alert-danger 
+           {% endif %} 
+           alert-dismissible fade show text-center" role="alert">
+             {{ message }}
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+           </div>
+           {% endfor %}
+         </div>
+         {% endif %}
+
+        <!-- table start -->
+        <div class="row mx-3">
+            <div class="wg-box">
+                <div class="flex items-center justify-between">
+                    <h5>Inventory Threshold</h5>
+                </div>
+                <div class="wg-table table-recent-orders">
+                    <ul class="table-title flex gap20 mb-14">
+                        <li>
+                            <div class="body-title text-main-dark">Item ID</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Item Name</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Threshold Value</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Auto Order Set</div>
+                        </li>
+                    </ul>
+                    <div class="divider mb-14"></div>
+                    <ul class="flex flex-column has-divider-line has-line-bot">
+                        {% for item in items_threshold %}
+                        <li class="item wg-product gap20">
+                            <div class="body-text text-main-dark mt-4">{{ item.ItemID }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.ItemName }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.ThresholdValue }}</div>
+                            <div>
+                                <div
+                                    class="{% if item.AutoOrderSet == 'Yes' %}block-available{% else %}block-pending{% endif %} fw-7">
+                                    {{ item.AutoOrderSet }} </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                <div class="flex items-center justify-between flex-wrap gap10">
+                    
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                        data-bs-target="#itemFormModal">
+                        Add Item
+                    </button>
+                </div>
+
+                <!-- Auto Order Pie Chart -->
+                <div class="chart-container">
+                    <h5>Auto Reorder Status</h5>
+                    <div id="pieChart"></div>
+                </div>
+
+                
+  <!-- Include ApexCharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get data from Django template
+        var autoOrderYes = {{ auto_order_yes }};
+        var autoOrderNo = {{ auto_order_no }};
+
+        // Chart options
+        var options = {
+            series: [autoOrderYes, autoOrderNo],
+            chart: {
+                type: 'pie',
+                height: 350
+            },
+            labels: ['Auto Order - Yes', 'Auto Order - No'],
+            colors: ['#28a745', '#dc3545'], // Green for Yes, Red for No
+            legend: {
+                position: 'bottom'
+            }
+        };
+
+        // Render the chart
+        var chart = new ApexCharts(document.querySelector("#pieChart"), options);
+        chart.render();
+    });
+</script>
+  <!-- /  threshold chart -->
+
+                <!-- Modal for Form -->
+                <div class="modal fade" id="itemFormModal" tabindex="-1" aria-labelledby="itemFormModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="itemFormModalLabel">Add New Item
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="{% url 'add_item' %}">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="itemID" class="form-label">Item ID</label>
+                                        <input type="number" name="ItemID" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="itemName" class="form-label">Item Name</label>
+                                        <input type="text" name="itemname" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="thresholdValue" class="form-label">Threshold Value</label>
+                                        <input type="number" name="thresholdvalue" step="0.01" class="form-control" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="unit" class="form-label">Unit</label>
+                                        <input type="text" name="unit" class="form-control" required>
+                                    </div>
+                                    <div class="container mx-4">
+                                        <label class="form-label">Auto Reordering:</label>
+                                        <div class="btn-group" role="group">
+                                            <input type="radio" class="btn-check" name="autoReorder" id="autoReorderYes" value="yes" checked>
+                                            <label class="btn btn-outline-primary" for="autoReorderYes">Yes</label>
+                                
+                                            <input type="radio" class="btn-check" name="autoReorder" id="autoReorderNo" value="no">
+                                            <label class="btn btn-outline-primary" for="autoReorderNo">No</label>
+                                        </div>
+                                    </div>
+                                
+                                    <button type="submit" class="btn btn-success">Save</button>
+                                </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- table ends -->
+
+        <br>
+        <br>
+        
+    </div>
+</div>
+
+
+{% endblock %}

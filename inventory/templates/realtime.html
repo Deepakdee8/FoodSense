@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+
+{% block title %}
+FOOD SENSE
+{% endblock %}
+
+{% block content %}
+<!-- main-content-wrap -->
+<div class="main-content-inner">
+    <!-- main-content-wrap -->
+
+    <div class="container mb-30">
+       
+
+        <br>
+        <!-- table start -->
+        <div class="row">
+            <div class="wg-box">
+                <div class="flex items-center justify-between">
+                    <h5>Inventory Realtime</h5>
+                </div>
+                <div class="wg-table table-recent-orders">
+                    <ul class="table-title flex gap20 mb-14">
+                        <li>
+                            <div class="body-title text-main-dark">Item ID</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Item Name</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Timestamp</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Weight</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">In-Shelf</div>
+                        </li>
+                    </ul>
+                    <div class="divider mb-14"></div>
+                    <ul class="flex flex-column has-divider-line has-line-bot" id="tableBody">
+                        <!-- Data will be inserted here -->
+                    </ul>
+                </div>
+                <div class="flex items-center justify-between flex-wrap gap10">
+                    <div class="text-tiny">Showing 1-5 of 10</div>
+                </div>
+            </div>
+        </div>
+        <!-- table ends -->
+        <br>
+        <br>
+        <br>
+        <div class="container mb-30">
+            <div class="card shadow-sm p-3">
+                <div class="d-flex justify-content-center">
+                    <canvas id="realtime_myChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- chart js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            let sheetData = [
+                { id: 101, name: "Tomatoes", weight: 6.51, inShelf: "Yes" },
+                { id: 102, name: "Chicken Breast", weight: 4.6, inShelf: "No" },
+                { id: 103, name: "Brown Rice", weight: 3.6, inShelf: "No" },
+                { id: 104, name: "Apples", weight: 6.26, inShelf: "No" },
+                { id: 105, name: "Salmon", weight: 6.69, inShelf: "Yes" }
+            ];
+
+            const tableBody = document.getElementById('tableBody');
+
+            async function updateTable() {
+                tableBody.innerHTML = '';
+                sheetData.forEach(item => {
+                    item.weight = (Math.random() * 10).toFixed(2);
+                    const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
+
+                    tableBody.innerHTML += `
+                    <li class="item wg-product gap20">
+                        <div>${item.id}</div>
+                        <div>${item.name}</div>
+                        <div>${timestamp}</div>
+                        <div>${item.weight} kg</div>
+                        <div>${item.inShelf}</div>
+                    </li>
+                `;
+                });
+                updateChart();
+            }
+
+            const ctx = document.getElementById('realtime_myChart').getContext('2d');
+            let myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sheetData.map(item => item.name),
+                    datasets: [{
+                        label: 'Quantity (kg)',
+                        data: sheetData.map(item => item.weight),
+                        backgroundColor: ['#4CAF50', '#FF9800', '#F44336', '#2196F3', '#9C27B0'],
+                        hoverBackgroundColor: ['#45a049', '#f57c00', '#e53935', '#1976d2', '#7b1fa2']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            function updateChart() {
+                myChart.data.datasets[0].data = sheetData.map(item => item.weight);
+                myChart.update();
+            }
+
+            setInterval(updateTable, 5000);
+        </script>
+
+        
+    </div>
+</div>
+
+
+{% endblock %}

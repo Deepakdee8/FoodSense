@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block title %}
+FOOD SENSE
+{% endblock %}
+
+{% block content %}
+<!-- main-content-wrap -->
+<div class="main-content-inner">
+    <!-- main-content-wrap -->
+
+    <div class="container mb-30">
+        <!-- custom chart -->
+        <div class="row">
+            <div class="wg-box">
+                <div class="flex items-center justify-between">
+                    <h5>Inventory Purchase</h5>
+                </div>
+
+                <div class="wg-table table-recent-orders">
+                    <ul class="table-title flex gap30 mb-14">
+                        <li>
+                            <div class="body-title text-main-dark">Item ID</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Item Name</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Category</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Supplier</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Purchase Date</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Invoice No.</div>
+                        </li>
+                    </ul>
+                    <div class="divider"></div>
+
+                    <ul class="flex flex-column has-divider-line has-line-bot"
+                        id="purchaseList">
+                        <!-- Dynamic rows will be inserted here -->
+                        {% for item in items_purchase %}
+                        <li class="item wg-product gap20">
+                            <div class="body-text text-main-dark mt-4">{{ item.ItemID }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.ItemName }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.Category }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.Supplier }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.PurchaseDate }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.InvoiceNumber }}</div>
+
+                        </li>
+                        {% endfor %}
+
+                    </ul>
+                </div>
+                    <!-- Pie Chart Section -->
+                    <div class="chart-container">
+                        <h5>Inventory Categories</h5>
+                        <div id="categoryPieChart"></div>
+                    </div>
+                    
+        <br>
+        <br>
+        
+    </div>
+</div>
+
+
+{% endblock %}
