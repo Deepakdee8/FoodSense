@@ -31,6 +31,9 @@ os.environ["INVENTORY_PURCHASE_DETAILS_DYNAMODB_TABLE_NAME"] = purchase_table_na
 threshold_table_name = os.getenv("INVENTORY_THRESHOLD_AUTOORDER_DYNAMODB_TABLE_NAME")
 os.environ["INVENTORY_THRESHOLD_AUTOORDER_DYNAMODB_TABLE_NAME"] = threshold_table_name
 
+autoorder_table_name = os.getenv("INVENTORY_AUTOORDER_LIST_TABLE_NAME")
+os.environ["INVENTORY_AUTOORDER_LIST_TABLE_NAME"] = autoorder_table_name
+
 # Initialize DynamoDB client
 dynamodb = boto3.resource(
     "dynamodb",
@@ -44,6 +47,7 @@ table = dynamodb.Table(dummy_table)
 realtime_table = dynamodb.Table(realtime_table_name)
 purchase_table = dynamodb.Table(purchase_table_name)
 threshold_table = dynamodb.Table(threshold_table_name)
+autoorder_table = dynamodb.Table(autoorder_table_name)
 
 
 def upload_to_dynamodb(json_file_path):

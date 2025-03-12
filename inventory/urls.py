@@ -28,12 +28,16 @@ urlpatterns = [
     path('threshold/', views.threshold_levels,name = 'threshold_levels'),
     path('realtime/', views.realtime_inventory,name = 'realtime_inventory'),
     path('purchase/', views.purchase_details,name = 'purchase_details'),
+    path('order/', views.order_details,name = 'order_details'),
     path("login/", views.user_login, name="login"),
     path("logout/", views.user_logout, name="logout"),
     path('upload/', views.upload_excel, name='upload_excel'),
     path('upload_to_cloud/', views.upload_to_cloud, name='upload_to_cloud'),
     path('api/least-quantity-items/', views.get_least_quantity_items, name='least_quantity_items'),
-     path('add_item/', views.add_item, name='add_item'),
+    path('add_item/', views.add_item, name='add_item'),
+    path('edit_item/<int:item_id>/', views.edit_item, name='edit_item'),
+    path('delete_item/<int:item_id>/', views.delete_item, name='delete_item'),
+
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

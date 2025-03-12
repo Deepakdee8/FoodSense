@@ -102,7 +102,7 @@
                     <ul class="sub-menu">
                       <li class="sub-menu-item">
                         <a href="{% url 'inventory' %}" class="">
-                          <div class="text">Upload Data</div>
+                          <div class="text">Upload </div>
                         </a>
                       </li>
                     </ul>
@@ -116,7 +116,7 @@
                   
                   </li>
                   <li class="menu-item ">
-                    <a href="javascript:void(0);" class="menu-item-button">
+                    <a href="{% url 'order_details' %}" class="menu-item-button">
                       <div class="icon">
                         <svg width="24" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path fill-rule="evenodd" clip-rule="evenodd"
@@ -318,7 +318,7 @@
                           <img src="{% static 'images/avatar/user-1.png' %}" alt="">
                         </span>
                         <span class="flex flex-column">
-                          <span class="body-text text-main-dark">Anthony</span>
+                          <span class="body-text text-main-dark">Devansh Mishra</span>
                           <span class="text-tiny">Restaurant Manager</span>
                         </span>
                       </span>
@@ -437,9 +437,9 @@
         let items = data.items;
   
         // Extract Names & Quantities
-        let labels = items.map(item => item.Name);
-        let quantities = items.map(item => parseInt(item.Quantity));
-        let unit = items.length > 0 ? items[0].Units : ''; 
+        let labels = items.map(item => item.ItemName);
+        let quantities = items.map(item => parseInt(item.Threshold));
+        let unit = items.length > 0 ? items[0].Unit : ''; 
   
         const ctx = document.getElementById('myChart').getContext('2d');
   

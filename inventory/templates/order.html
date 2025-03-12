@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}
+FOOD SENSE
+{% endblock %}
+
+{% block content %}
+<!-- main-content-wrap -->
+<div class="main-content-inner">
+    <!-- main-content-wrap -->
+
+    <div class="container mb-30">
+        <!-- custom chart -->
+        <div class="row">
+            <div class="wg-box">
+                <div class="flex items-center justify-between">
+                    <h5>Auto Order List</h5>
+                </div>
+
+                <div class="wg-table table-recent-orders">
+                    <ul class="table-title flex gap30 mb-14">
+                        <li>
+                            <div class="body-title text-main-dark">Item ID</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Item Name</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Quantity</div>
+                        </li>
+                        <li>
+                            <div class="body-title text-main-dark">Units</div>
+                        </li>
+                    </ul>
+                    <div class="divider"></div>
+
+                    <ul class="flex flex-column has-divider-line has-line-bot"
+                        id="purchaseList">
+                        <!-- Dynamic rows will be inserted here -->
+                        {% for item in items_order %}
+                        <li class="item wg-product gap20">
+                            <div class="body-text text-main-dark mt-4">{{ item.ItemID }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.ItemName }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.Quantity }}</div>
+                            <div class="body-text text-main-dark mt-4">{{ item.Unit }}</div>
+                        </li>
+                        {% endfor %}
+
+                    </ul>
+                    <br>
+                    <br>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+        <br>
+        <br>
+        <button type="submit" class="btn btn-success  "> Auto order details </button>
+
+
+{% endblock %}

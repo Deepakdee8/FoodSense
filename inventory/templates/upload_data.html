@@ -9,10 +9,8 @@ FOOD SENSE
 <div class="main-content-inner">
     <!-- main-content-wrap -->
 
-    <div class="container mb-30">
+    <div class="container d-flex flex-column align-items-center mb-30">
          <!-- Upload Section -->
-         <div class="col-md-8 d-flex flex-column align-items-center">
-            <h3 class="mb-3">IOT Part</h3>
             <!-- Display Success & Error Messages -->
             {% if messages %}
             <div class="mt-3 w-100">
@@ -29,30 +27,111 @@ FOOD SENSE
             </div>
             {% endif %}
     
-            <div class="p-4 w-100 text-center">
-    
-              <!-- Upload Excel File Section -->
-              <h5 class="mb-3">Upload Excel File</h5>
-              <form action="{% url 'upload_excel' %}" method="post" enctype="multipart/form-data" class="mb-4">
-                {% csrf_token %}
-                <div class="mb-3">
-                  <input class="form-control" id="formFile" type="file" name="excel_file" accept=".xlsx, .xls" required>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Upload & Convert</button>
-              </form>
-    
-              <!-- Upload JSON to Cloud Section -->
-              <h5 class="my-3">Upload To Cloud</h5>
-              <form action="{% url 'upload_to_cloud' %}" method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success w-100">Upload to Cloud</button>
-              </form>
-            </div>
-          </div>
+           
     
         <br>
+
+        <div class="col-md-4 d-flex flex-column align-items-center">
+          <h3 class="mb-3 text-primary">Upload Purchase Data</h3>
+          <div class="p-4 w-100 text-center bg-light shadow-lg rounded-4 upload-container">
+
+              <!-- Upload Excel File Section -->
+              <h5 class="mb-3 text-success">Upload Excel File</h5>
+              <form action="{% url 'upload_excel' %}" method="post" enctype="multipart/form-data" class="mb-4">
+
+                  <div class="mb-3 file-upload-area">
+                      <label for="formFile" class="custom-file-upload">
+                          <i class='bx bx-cloud-upload'></i>
+                          <span>Click to Upload Excel File</span>
+                      </label>
+                      <input class="form-control" id="formFile" type="file" name="excel_file"
+                          accept=".xlsx, .xls" required hidden>
+                      <p class="file-name text-secondary">No file chosen</p>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100 btn-upload">Upload &
+                      Convert</button>
+              </form>
+
+              <!-- Upload JSON to Cloud Section -->
+              <h5 class="my-3 text-info">Upload To Cloud</h5>
+              <form action="{% url 'upload_to_cloud' %}" method="post">
+                  <button type="submit" class="btn btn-success w-100 btn-cloud-upload">Upload
+                      to Cloud</button>
+              </form>
+          </div>
+      </div>
     </div>
 </div>
+
+
+<style>
+  .upload-container {
+      border: 2px dashed #ddd;
+      border-radius: 12px;
+      transition: all 0.3s;
+  }
+
+  .upload-container:hover {
+      border-color: #000000;
+      background-color: #f8f9fa;
+      transform: scale(1.02);
+  }
+
+  .custom-file-upload {
+      border: 2px solid #28a745;
+      padding: 15px;
+      border-radius: 10px;
+      display: inline-block;
+      cursor: pointer;
+      background-color: #e9f7f0;
+      color: #28a745;
+      transition: all 0.3s;
+  }
+
+  .custom-file-upload:hover {
+      background-color: #28a745;
+      color: #fff;
+      transform: scale(1.05);
+  }
+
+  .custom-file-upload i {
+      font-size: 24px;
+      margin-right: 8px;
+  }
+
+  .file-name {
+      font-size: 14px;
+      color: #6c757d;
+  }
+
+  .btn-upload {
+      background-color: #FB923C;
+      transition: all 0.3s;
+  }
+
+  .btn-upload:hover {
+      background-color: #fe7200;
+  }
+
+  .btn-cloud-upload {
+      background-color: #28a745;
+      transition: all 0.3s;
+  }
+
+  .btn-cloud-upload:hover {
+      background-color: #1e7e34;
+  }
+</style>
+
+<script>
+  const fileInput = document.getElementById('formFile');
+  const fileNameDisplay = document.querySelector('.file-name');
+
+  fileInput.addEventListener('change', (event) => {
+      const fileName = event.target.files[0]?.name || 'No file chosen';
+      fileNameDisplay.textContent = fileName;
+  });
+</script>
 
 
 {% endblock %}
