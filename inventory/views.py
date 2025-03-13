@@ -9,11 +9,13 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 # Initialize DynamoDB client
 from .aws_utils import table,realtime_table,purchase_table,threshold_table,autoorder_table
 from .aws_utils import upload_to_dynamodb
 
-
+# Store auto-order items in a global list (or use a database)
+AUTO_ORDER_LIST = []
 
 # Login view
 def user_login(request):
@@ -225,7 +227,7 @@ def add_item(request):
             item_id = request.POST.get("ItemID")
             item_name = request.POST.get("itemname")
             threshold_value = request.POST.get("thresholdvalue")
-            unit = request.POST.get("unit")
+            units = request.POST.get("unit")
             auto_order = request.POST.get("autoReorder")
             required_quantity = request.POST.get("requiredquantity")
 
@@ -239,7 +241,7 @@ def add_item(request):
                     "ItemID": item_id,  # Convert to string as DynamoDB expects keys as strings
                     "ItemName": item_name,
                     "Threshold": threshold_value,
-                    "Unit": unit,
+                    "Units": units,
                     "Autoorder": "Yes" if auto_order == "yes" else "No",
                     "RequiredQuantity" : required_quantity
                 }
@@ -263,7 +265,7 @@ def edit_item(request, item_id):
             # Convert threshold_value and required_quantity to Decimal
             threshold_value = Decimal(threshold_value)
             required_quantity = Decimal(required_quantity)
-
+            item_id = str(item_id)  
             # Update the item in DynamoDB
             threshold_table.update_item(
                 Key={"ItemID": item_id},
@@ -292,3 +294,22 @@ def delete_item(request, item_id):
         messages.error(request, f"Error deleting item: {e}")
 
     return redirect("threshold_levels")
+
+
+@csrf_exempt
+def receive_autoorder(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            autoorder_list = data.get("autoorder_list", [])
+            # AUTO_ORDER_LIST.clear()
+            AUTO_ORDER_LIST.extend(autoorder_list)
+            return JsonResponse({"message": "Auto-order data received", "data": AUTO_ORDER_LIST}, status=200)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+
+    elif request.method == "GET":
+        # Return the auto-order list
+        return JsonResponse({"data": AUTO_ORDER_LIST}, status=200)
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

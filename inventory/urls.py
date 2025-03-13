@@ -34,6 +34,7 @@ urlpatterns = [
     path('upload/', views.upload_excel, name='upload_excel'),
     path('upload_to_cloud/', views.upload_to_cloud, name='upload_to_cloud'),
     path('api/least-quantity-items/', views.get_least_quantity_items, name='least_quantity_items'),
+    path("api/receive_autoorder/", views.receive_autoorder, name="receive_autoorder"),
     path('add_item/', views.add_item, name='add_item'),
     path('edit_item/<int:item_id>/', views.edit_item, name='edit_item'),
     path('delete_item/<int:item_id>/', views.delete_item, name='delete_item'),

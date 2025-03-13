@@ -7,10 +7,9 @@ FOOD SENSE
 {% block content %}
 <!-- main-content-wrap -->
 <div class="main-content-inner">
-    <!-- main-content-wrap -->
-
+    <!-- container -->
     <div class="container mb-30">
-        <!-- custom chart -->
+        <!-- Auto Order Section -->
         <div class="row">
             <div class="wg-box">
                 <div class="flex items-center justify-between">
@@ -18,6 +17,7 @@ FOOD SENSE
                 </div>
 
                 <div class="wg-table table-recent-orders">
+                    <!-- Table Header -->
                     <ul class="table-title flex gap30 mb-14">
                         <li>
                             <div class="body-title text-main-dark">Item ID</div>
@@ -32,32 +32,61 @@ FOOD SENSE
                             <div class="body-title text-main-dark">Units</div>
                         </li>
                     </ul>
+
                     <div class="divider"></div>
 
-                    <ul class="flex flex-column has-divider-line has-line-bot"
-                        id="purchaseList">
-                        <!-- Dynamic rows will be inserted here -->
-                        {% for item in items_order %}
+                    <!-- Dynamic List -->
+                    <ul class="flex flex-column has-divider-line has-line-bot" id="purchaseList">
                         <li class="item wg-product gap20">
-                            <div class="body-text text-main-dark mt-4">{{ item.ItemID }}</div>
-                            <div class="body-text text-main-dark mt-4">{{ item.ItemName }}</div>
-                            <div class="body-text text-main-dark mt-4">{{ item.Quantity }}</div>
-                            <div class="body-text text-main-dark mt-4">{{ item.Unit }}</div>
+                            <div class="body-text text-main-dark mt-4">Loading...</div>
                         </li>
-                        {% endfor %}
-
                     </ul>
-                    <br>
-                    <br>
                 </div>
-                
-                
-                
             </div>
         </div>
-        <br>
-        <br>
-        <button type="submit" class="btn btn-success  "> Auto order details </button>
 
+        <br><br>
+        <button type="button" class="btn btn-success" onclick="fetchAutoOrderData()">Refresh Auto Order List</button>
+    </div>
+</div>
+
+<!-- JavaScript for Auto-Updating Data -->
+<script>
+    function fetchAutoOrderData() {
+        fetch("/api/receive_autoorder/")  // Make sure this matches Django's view
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("API responded with status: " + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const autoorder_list = data.data;  // Make sure response contains "data"
+                const tableBody = document.getElementById("purchaseList");
+                tableBody.innerHTML = "";  // Clear old content
+    
+                if (!autoorder_list || autoorder_list.length === 0) {
+                    tableBody.innerHTML = "<li><div class='body-text text-main-dark mt-4'>No items for Auto Ordering</div></li>";
+                } else {
+                    autoorder_list.forEach(item => {
+                        const row = `
+                            <li class="item wg-product gap20">
+                                <div class="body-text text-main-dark mt-4">${item.ItemID}</div>
+                                <div class="body-text text-main-dark mt-4">${item.ItemName}</div>
+                                <div class="body-text text-main-dark mt-4">${item.Quantity}</div>
+                                <div class="body-text text-main-dark mt-4">${item.Unit}</div>
+                            </li>`;
+                        tableBody.innerHTML += row;
+                    });
+                }
+            })
+            .catch(error => console.error("Error fetching data:", error));
+    }
+  
+    // Auto-refresh every 5 seconds
+    
+    {% comment %} setInterval(fetchAutoOrderData, 5000);
+    fetchAutoOrderData(); {% endcomment %}
+</script>
 
 {% endblock %}

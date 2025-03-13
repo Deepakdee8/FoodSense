@@ -63,7 +63,7 @@ FOOD SENSE
                             <div class="w-1/7 body-text text-main-dark mt-2">{{ item.ItemID }}</div>
                             <div class="w-2/7 body-text text-main-dark mt-2">{{ item.ItemName }}</div>
                             <div class="w-1/7 body-text text-main-dark mt-2">{{ item.Threshold }}</div>
-                            <div class="w-1/7 body-text text-main-dark mt-2">{{ item.Unit }}</div>
+                            <div class="w-1/7 body-text text-main-dark mt-2">{{ item.Units }}</div>
                             
                             <div class="w-1/7">
                                 <div class="{% if item.Autoorder == 'Yes' %}block-available{% else %}block-pending{% endif %} fw-7">
@@ -217,7 +217,7 @@ FOOD SENSE
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Unit</label>
-                                        <input type="text" class="form-control" name="unit" value="{{ item.Unit }}">
+                                        <input type="text" class="form-control" name="unit" value="{{ item.Units }}">
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Required Quantity</label>
