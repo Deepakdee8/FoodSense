@@ -311,7 +311,12 @@ def receive_autoorder(request):
             return JsonResponse({"error": str(e)}, status=400)
 
     elif request.method == "GET":
-        # Return the auto-order list
-        return JsonResponse({"data": AUTO_ORDER_LIST}, status=200)
+            data = json.loads(request.body)
+            print(f"Raw data: ",data)
+            autoorder_list = data.get("autoorder_list", [])
+            print(f"auto order list received:",autoorder_list)
+            # AUTO_ORDER_LIST.clear()
+            AUTO_ORDER_LIST.extend(autoorder_list)
+            return JsonResponse({"message": "Auto-order data received", "data": AUTO_ORDER_LIST}, status=200)
 
     return JsonResponse({"error": "Invalid request"}, status=400)
