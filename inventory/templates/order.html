@@ -53,22 +53,32 @@ FOOD SENSE
 <!-- JavaScript for Auto-Updating Data -->
 <script>
     function fetchAutoOrderData() {
-        fetch("/api/receive_autoorder/")  // Make sure this matches Django's view
+        console.log("Fetching auto order data...");  // Log function call
+
+        fetch("/api/receive_autoorder/")  // Ensure this matches your Django API route
             .then(response => {
+                console.log("API Response received:", response); // Log full response object
                 if (!response.ok) {
                     throw new Error("API responded with status: " + response.status);
                 }
                 return response.json();
             })
             .then(data => {
-                const autoorder_list = data.data;  // Make sure response contains "data"
+                console.log("Parsed JSON response:", data); // Log parsed JSON
+
+                const autoorder_list = data.data;  // Ensure response contains "data"
+                console.log("Extracted autoorder_list:", autoorder_list);  // Debug list content
+
                 const tableBody = document.getElementById("purchaseList");
                 tableBody.innerHTML = "";  // Clear old content
-    
+
                 if (!autoorder_list || autoorder_list.length === 0) {
+                    console.log("No items for auto ordering.");
                     tableBody.innerHTML = "<li><div class='body-text text-main-dark mt-4'>No items for Auto Ordering</div></li>";
                 } else {
                     autoorder_list.forEach(item => {
+                        console.log("Processing item:", item);  // Log each item in the loop
+
                         const row = `
                             <li class="item wg-product gap20">
                                 <div class="body-text text-main-dark mt-4">${item.ItemID}</div>
@@ -80,13 +90,17 @@ FOOD SENSE
                     });
                 }
             })
-            .catch(error => console.error("Error fetching data:", error));
+            .catch(error => {
+                console.error("Error fetching data:", error); // Log fetch errors
+            });
     }
-  
+
     // Auto-refresh every 5 seconds
-    
-    {% comment %} setInterval(fetchAutoOrderData, 5000);
-    fetchAutoOrderData(); {% endcomment %}
+    {% comment %} 
+    setInterval(fetchAutoOrderData, 5000);
+    fetchAutoOrderData(); 
+    {% endcomment %}
 </script>
+
 
 {% endblock %}

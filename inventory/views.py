@@ -301,7 +301,9 @@ def receive_autoorder(request):
     if request.method == "POST":
         try:
             data = json.loads(request.body)
+            print(f"Raw data: ",data)
             autoorder_list = data.get("autoorder_list", [])
+            print(f"auto order list received:",autoorder_list)
             # AUTO_ORDER_LIST.clear()
             AUTO_ORDER_LIST.extend(autoorder_list)
             return JsonResponse({"message": "Auto-order data received", "data": AUTO_ORDER_LIST}, status=200)

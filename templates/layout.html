@@ -490,34 +490,7 @@
 
   <!--  threshold chart -->
 
-  <!-- Include ApexCharts -->
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Get data from Django template
-        var autoOrderYes = {{ auto_order_yes }};
-        var autoOrderNo = {{ auto_order_no }};
-
-        // Chart options
-        var options = {
-            series: [autoOrderYes, autoOrderNo],
-            chart: {
-                type: 'pie',
-                height: 350
-            },
-            labels: ['Auto Order - Yes', 'Auto Order - No'],
-            colors: ['#28a745', '#dc3545'], // Green for Yes, Red for No
-            legend: {
-                position: 'bottom'
-            }
-        };
-
-        // Render the chart
-        var chart = new ApexCharts(document.querySelector("#pieChart"), options);
-        chart.render();
-    });
-</script>
-  <!-- /  threshold chart -->
+ 
 
 </body>
 
