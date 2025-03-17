@@ -11,36 +11,36 @@ FOOD SENSE
     <div class="container mb-30">
         <!-- Auto Order Section -->
         <div class="row mx-3">
-        <div class="col-lg-10">
-            <div class="wg-box">
-                <div class="flex items-center justify-between">
-                    <h5>Auto Order List</h5>
+            <div class="col-lg-10">
+                <div class="wg-box">
+                    <div class="flex items-center justify-between">
+                        <h5>Auto Order List</h5>
+                    </div>
+
+                    <div class=" table-recent-orders">
+                        <!-- Table Header -->
+                        <ul class="table-title flex gap20 mb-14">
+                            <li Style="width:25%">
+                                <div class="body-title text-main-dark">Item ID</div>
+                            </li>
+                            <li Style="width:50%">
+                                <div class="body-title text-main-dark">Item Name</div>
+                            </li>
+                            <li Style="width:25%">
+                                <div class="body-title text-main-dark">Quantity</div>
+                            </li>
+                        </ul>
+
+                        <div class="divider mb-14"></div>
+
+                        <!-- Dynamic List -->
+                        <ul class="flex flex-column has-divider-line has-line-bot" id="purchaseList">
+                            <li class="item wg-product gap20">
+                                <div class="body-text text-main-dark mt-4">Loading...</div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-
-                <div class=" table-recent-orders">
-                    <!-- Table Header -->
-                    <ul class="table-title flex gap20 mb-14">
-                        <li Style="width:25%">
-                            <div class="body-title text-main-dark">Item ID</div>
-                        </li>
-                        <li Style="width:50%">
-                            <div class="body-title text-main-dark">Item Name</div>
-                        </li>
-                        <li Style="width:25%">
-                            <div class="body-title text-main-dark">Quantity</div>
-                        </li>
-                    </ul>
-
-                    <div class="divider mb-14"></div>
-
-                    <!-- Dynamic List -->
-                    <ul class="flex flex-column has-divider-line has-line-bot" id="purchaseList">
-                        <li class="item wg-product gap20">
-                            <div class="body-text text-main-dark mt-4">Loading...</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
             </div>
         </div>
 
@@ -94,9 +94,9 @@ FOOD SENSE
     }
 
     // Auto-refresh every 5 seconds
-    {% comment %} 
+    {% comment %}
     setInterval(fetchAutoOrderData, 5000);
-    fetchAutoOrderData(); 
+    fetchAutoOrderData();
     {% endcomment %}
 </script>
 
